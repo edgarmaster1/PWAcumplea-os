@@ -1,40 +1,34 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import {collection, getDocs, getDoc, deleteDoc, doc} from 'firebase/firestore'
-import { db } from '../firebaseConfig/firebase'
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import { async } from '@firebase/util'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { collection, getDocs, getDoc, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebaseConfig/firebase';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
+const MySwal = withReactContent(Swal);
 
-const MySwal = withReactContent(Swal)
-  
 const Show = () => {
-  //1 - configuramos los hooks
-  const [products, setProducts] = useState( [] )
+  const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
 
-  //2 - referenciamos a la DB firestore
-  const productsCollection = collection(db, "products")
+  const productsCollection = collection(db, "products");
 
-  //3 - Funcion para mostrar TODOS los docs
-  const getProducts = async ()   => {
-   const data = await getDocs(productsCollection)
-   //console.log(data.docs)
-   setProducts(
-       data.docs.map( (doc) => ( {...doc.data(),id:doc.id}))
-   )
-   //console.log(products)
-  }
-  //4 - Funcion para eliminar un doc
+  const getProducts = async () => {
+    const data = await getDocs(productsCollection);
+    setProducts(
+      data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+    );
+  };
+
   const deleteProduct = async (id) => {
-   const productDoc = doc(db, "products", id)
-   await deleteDoc(productDoc)
-   getProducts()
-  }
-  //5 - Funcion de confirmacion para Sweet Alert 2
+    const productDoc = doc(db, "products", id);
+    await deleteDoc(productDoc);
+    getProducts();
+  };
+
   const confirmDelete = (id) => {
     MySwal.fire({
-      title: '¿Elimina el producto?',
+      title: '¿Eliminar registro?',
       text: "¡No podrás revertir esto!",
       icon: 'warning',
       showCancelButton: true,
@@ -42,60 +36,75 @@ const Show = () => {
       cancelButtonColor: '#3085d6',
       confirmButtonText: '¡Sí, bórralo!'
     }).then((result) => {
-      if (result.isConfirmed) { 
-        //llamamos a la fcion para eliminar   
-        deleteProduct(id)               
+      if (result.isConfirmed) {
+        deleteProduct(id);
         Swal.fire(
           'Eliminado!',
           'Tu archivo ha sido eliminado.',
           'Listo!!'
-        )
+        );
       }
-    })    
-  }
-  //6 - usamos useEffect
-  useEffect( () => {
-    getProducts()
-    // eslint-disable-next-line
-  }, [] )
-  //7 - devolvemos vista de nuestro componente
-  return (
-    <>
-    <div className='container' style={{backgroundColor:"#941EDC"}}>
-      <div className='row' >
-        <div className='col' >
-          <div className="d-grid gap-2" >
-         {/* <Link to="/login" className='btn btn-secondary mt-2 mb-2'>login</Link>    */}
+    });
+  };
 
-            <Link to="/create" className='btn btn-secondary mt-2 mb-2 '  style={{backgroundColor:" #12B020 "}} >Agregar nuevo cumpleaños</Link>    
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredProducts = products.filter((product) =>
+    product.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className='container mt-5'>
+      <div className='row'>
+        <div className='col'>
+          <div className="d-grid gap-2">
+            
           </div>
-          
-          <table className='table table-dark table-hover' >
-            <thead  >
-              <tr  >
-                <th style={{backgroundColor:"#001A73 "}}>Personas</th>
-                <th style={{backgroundColor:"#001A73 "}}>Fechas</th>
-                <th style={{backgroundColor:"#001A73 "}}></th>
-              </tr>
-            </thead>
-            <tbody>
-              { products.map( (product) => (
-                <tr key={product.id}>
-                  <td style={{backgroundColor:"#001A73 "}}>{product.description}</td>
-                  <td style={{backgroundColor:"#001A73 "}}>{product.stock}</td>
-                  <td style={{backgroundColor:"#001A73 "}}>
-                    <Link to={`/edit/${product.id}`} className="btn btn-light"><i className="fa-solid fa-pencil"></i></Link>
-                    <button onClick={ () => { confirmDelete(product.id) } } className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
-                  </td>
-                </tr>                
-              )) }
-            </tbody>
-          </table>
+          <div className='d-flex mb-2'>
+            <input
+              type="text"
+              placeholder="Buscar "
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="form-control"
+            />
+          </div>
+          <Link to="/create">
+              <button className='btn btn-primary mt-2 mb-2' style={{ backgroundColor: "#135EA2", border: "none" }}>Agregar nuevo cumpleaños</button>
+            </Link>
+          <div className="table-responsive">
+            <table className='table table-striped table-bordered table-hover'>
+              <thead className="thead-dark">
+                <tr>
+                  <th>Personas</th>
+                  <th>Fechas</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product) => (
+                  <tr key={product.id}>
+                    <td>{product.description}</td>
+                    <td>{product.stock}</td>
+                    <td>
+                      <Link to={`/edit/${product.id}`} className="btn btn-info"><i className="fa-solid fa-pencil"></i></Link>
+                      <button onClick={() => { confirmDelete(product.id) }} className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-    </>
-  )
-}
+  );
+};
 
-export default Show
+export default Show;
