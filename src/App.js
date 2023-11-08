@@ -9,6 +9,7 @@ import Edit from './components/Edit';
 //importamos el router
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import LoginD from './components/login';
+import RegistroUsuario from './components/Registrarse';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/Inicio' element={ <Show /> } />
         <Route path='/create' element={ <Create /> } />
         <Route path='/edit/:id' element={ <Edit /> } />
+        <Route exact path='/Registrarse' element={ <RegistroUsuario />} />
         <Route exact path='/' element={ <LoginD />} />
 
       </Routes>

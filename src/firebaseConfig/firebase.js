@@ -9,7 +9,8 @@ const firebaseConfig = {
   projectId: "appwpa-aa5f2",
   storageBucket: "appwpa-aa5f2.appspot.com",
   messagingSenderId: "152187376102",
-  appId: "1:152187376102:web:9b773303248d9624fb4627"
+  appId: "1:152187376102:web:9b773303248d9624fb4627",
+  measurementId: "G-WSQL7XWN5T"
 };
 
 

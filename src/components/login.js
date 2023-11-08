@@ -1,27 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebaseConfig/firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { db } from "../firebaseConfig/firebase";
 
 function LoginD() {
   const Navegacion = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
-    const UsersRef = db.collection("1123");
-    const snapshot = await UsersRef.get();
-    const UsersData = snapshot.docs.map((doc) => doc.data());
+  
+    const handleLogin = async () => {
+      const UsersRef = db.collection("1123");
+      const snapshot = await UsersRef.get();
+      const UsersData = snapshot.docs.map((doc) => doc.data());
+      console.log(UsersData);
+      
+      const PorNombre = UsersData.filter((item) => item.nombre === username);
+      const PorPassWord = PorNombre.filter((item) => item.contraseña === password);  
+      console.log(PorPassWord);
 
-    const PorNombre = UsersData.filter((item) => item.usuario === username);
-    const PorPassWord = PorNombre.filter((item) => item.contraeña === password);
+      PorPassWord.length > 0 
+      ? 
+      Navegacion('/Inicio')
+      :
+      Navegacion('/')
 
-    if (PorPassWord.length > 0) {
-      setTimeout(() => {
-        Navegacion("/Inicio");
-      }, 1000);
-    }
   };
 
   return (
@@ -46,7 +51,6 @@ function LoginD() {
             <br />
             <div className="form-group">
               <label htmlFor="password">Contraseña:</label>
-              
               <input
                 type="password"
                 className="form-control"
@@ -60,6 +64,11 @@ function LoginD() {
               <button type="button" onClick={handleLogin} className="btn btn-primary" style={{ backgroundColor: "#0B54BD  ", padding: "10px 20px", borderRadius: "5px", border: "none", cursor: "pointer" }}>
                 Iniciar sesión
               </button>
+
+              {/* Agrega un enlace (Link) a la vista de registro */}
+              <Link to="/Registrarse" className="btn btn-secondary" style={{ padding: "10px 20px", borderRadius: "5px", border: "none", cursor: "pointer", marginLeft: "10px" }}>
+                Registrar
+              </Link>
             </div>
           </form>
         </div>
