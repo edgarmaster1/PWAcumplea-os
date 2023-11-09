@@ -21,31 +21,23 @@ const RegistroUsuario = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // try {
-    //   const usersCollection = collection(db, 'usuarios');
-    //   await addDoc(usersCollection, userData);
-    //   // Puedes mostrar un mensaje de éxito o redirigir al usuario a una página diferente.
-    //   console.log('Usuario registrado con éxito');
-    //   navigate('/Inicio'); // Redirige al usuario a la página de inicio después del registro.
-    // } catch (error) {
-    //   // Maneja cualquier error de registro, muestra un mensaje de error o registra el error.
-    //   console.error('Error al registrar usuario:', error);
-    // }
-
-    const ref  = db.collection('1123')
-    ref.add(userData)
-    .then(()=>{
-        console.log('Se Guardo')
-        navigate('/Inicio')
-        
-    })
+    const ref = db.collection('1123');
+    ref
+      .add(userData)
+      .then(() => {
+        console.log('Usuario registrado con éxito');
+        navigate('/');
+      })
+      .catch((error) => {
+        console.error('Error al registrar usuario:', error);
+      });
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row">
-        <div className="col">
-          <h2>Registrar Nuevo Usuario</h2>
+    <div className="container mt-5 d-flex justify-content-center">
+      <div className="card" style={{ width: '500px', backgroundColor: '#309735', color: 'white', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)' }}>
+        <div className="card-body">
+          <h2 className="card-title text-center">Registrar Nuevo Usuario</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="nombre" className="form-label">
