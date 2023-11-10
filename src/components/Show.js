@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link,  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { getAuth } from "firebase/auth";
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig/firebase';
 import Swal from 'sweetalert2';
@@ -54,6 +55,15 @@ const Show = () => {
     product.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await auth.signOut(); // Cierra la sesión del usuario
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
   return (
     <div>
       {/* Navbar */}
@@ -72,11 +82,24 @@ const Show = () => {
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-             
             </Form>
-            <Link to="/create" className="btn btn-primary ml-2" style={{ backgroundColor: '#BFF0FF', border: 'none',color:"black" }}>
+            <Link
+              to="/create"
+              className="btn btn-primary ml-2"
+              style={{ backgroundColor: '#BFF0FF', border: 'none', color: 'black' }}
+            >
               Agregar nuevo cumpleaños
             </Link>
+            <Button
+              variant="danger"
+              onClick={handleLogout}
+              as={Link}
+              to="/"
+              className="ml-2"
+              style={{ backgroundColor: '#9FFF96', border: 'none', color: 'white' }}
+            >
+              Cerrar Sesión
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

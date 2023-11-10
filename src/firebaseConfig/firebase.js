@@ -1,6 +1,6 @@
 import firebase from "firebase/compat/app";
-
-
+import { getAnalytics } from "firebase/analytics";
+import {getMessaging} from 'firebase/messaging';
 import 'firebase/compat/firestore' 
 
 const firebaseConfig = {
@@ -13,7 +13,7 @@ const firebaseConfig = {
   measurementId: "G-WSQL7XWN5T"
 };
 
-
+const analytics = getAnalytics(app);
 const app = firebase.initializeApp(firebaseConfig);
-
+export const messaging = getMessaging(app);
 export const db = app.firestore()
