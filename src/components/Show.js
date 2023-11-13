@@ -6,8 +6,43 @@ import { db } from '../firebaseConfig/firebase';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
+import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const MySwal = withReactContent(Swal);
+
+function Example(args) {
+  const [modal, setModal] = useState(true);
+
+  const toggle = () => setModal(!modal);
+
+  return (
+    <div>
+      {/* <Button color="danger" onClick={toggle}>
+        Click Me
+      </Button> */}
+      <Modal isOpen={modal} toggle={toggle} {...args}>
+        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+        <ModalBody>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>
+            Do Something
+          </Button>{' '}
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+}
 
 const Show = () => {
   const [products, setProducts] = useState([]);
@@ -67,9 +102,9 @@ const Show = () => {
   return (
     <div>
       {/* Navbar */}
-      <Navbar bg="light" expand="lg">
-        <Navbar.Brand as={Link} to="/">
-          mi primera chamba
+      <Navbar   style={{ backgroundColor: '#40973B' }} expand="lg">
+        <Navbar.Brand as={Link} to="/"  >
+          <h5 style={{color: 'white'}}>mi primera chamba </h5> 
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
@@ -86,7 +121,7 @@ const Show = () => {
             <Link
               to="/create"
               className="btn btn-primary ml-2"
-              style={{ backgroundColor: '#BFF0FF', border: 'none', color: 'black' }}
+              style={{ backgroundColor: '#40973B', border: 'none', color: 'white' }}
             >
               Agregar nuevo cumpleaños
             </Link>
@@ -96,13 +131,16 @@ const Show = () => {
               as={Link}
               to="/"
               className="ml-2"
-              style={{ backgroundColor: '#9FFF96', border: 'none', color: 'white' }}
+              style={{ backgroundColor: '#40973B', border: 'none', color: 'white' }}
             >
               Cerrar Sesión
             </Button>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+
+      {/* Agregar el componente Example para mostrar el mensaje */}
+      <Example />
 
       <div className="container mt-5">
         <div className="row">
