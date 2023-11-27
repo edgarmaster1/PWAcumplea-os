@@ -21,23 +21,17 @@ function Example(args) {
         Click Me
       </Button> */}
       <Modal isOpen={modal} toggle={toggle} {...args}>
-        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+        <ModalHeader toggle={toggle}>HOLA BIENVENIDO😀</ModalHeader>
         <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          mi primera chamba 
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>
+          {/* <Button color="primary" onClick={toggle}>
             Do Something
-          </Button>{' '}
-          <Button color="secondary" onClick={toggle}>
-            Cancel
-          </Button>
+          </Button>{' '} */}
+          {/* <Button color="secondary" onClick={toggle}>
+            Cerrar
+          </Button> */}
         </ModalFooter>
       </Modal>
     </div>
@@ -54,6 +48,8 @@ const Show = () => {
     const data = await getDocs(productsCollection);
     setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
+
+  
 
   const deleteProduct = async (id) => {
     const productDoc = doc(db, 'products', id);
@@ -104,7 +100,7 @@ const Show = () => {
       {/* Navbar */}
       <Navbar   style={{ backgroundColor: '#40973B' }} expand="lg">
         <Navbar.Brand as={Link} to="/"  >
-          <h5 style={{color: 'white'}}>mi primera chamba </h5> 
+          <h5 style={{color: 'white'}}>Derechos reservados por Edgar Angeles Gonzalez </h5> 
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
@@ -138,10 +134,8 @@ const Show = () => {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-
       {/* Agregar el componente Example para mostrar el mensaje */}
       <Example />
-
       <div className="container mt-5">
         <div className="row">
           <div className="col">
