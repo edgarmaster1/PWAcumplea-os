@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getAuth } from "firebase/auth";
+import { getAuth } from 'firebase/auth';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebaseConfig/firebase';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
-import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const MySwal = withReactContent(Swal);
 
@@ -17,22 +17,10 @@ function Example(args) {
 
   return (
     <div>
-      {/* <Button color="danger" onClick={toggle}>
-        Click Me
-      </Button> */}
       <Modal isOpen={modal} toggle={toggle} {...args}>
         <ModalHeader toggle={toggle}>HOLA BIENVENIDO😀</ModalHeader>
-        <ModalBody>
-          mi primera chamba 
-        </ModalBody>
-        <ModalFooter>
-          {/* <Button color="primary" onClick={toggle}>
-            Do Something
-          </Button>{' '} */}
-          {/* <Button color="secondary" onClick={toggle}>
-            Cerrar
-          </Button> */}
-        </ModalFooter>
+        <ModalBody>mi primera chamba</ModalBody>
+        <ModalFooter></ModalFooter>
       </Modal>
     </div>
   );
@@ -44,20 +32,18 @@ const Show = () => {
 
   const productsCollection = collection(db, 'products');
 
-  const getProducts = async () => {
+  const getProducts = useCallback(async () => {
     const data = await getDocs(productsCollection);
     setProducts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
+  }, [productsCollection]);
 
-  
-
-  const deleteProduct = async (id) => {
+  const deleteProduct = useCallback(async (id) => {
     const productDoc = doc(db, 'products', id);
     await deleteDoc(productDoc);
     getProducts();
-  };
+  }, [getProducts]);
 
-  const confirmDelete = (id) => {
+  const confirmDelete = useCallback((id) => {
     MySwal.fire({
       title: '¿Eliminar registro?',
       text: '¡No podrás revertir esto!',
@@ -72,35 +58,35 @@ const Show = () => {
         Swal.fire('Eliminado!', 'Tu archivo ha sido eliminado.', 'Listo!!');
       }
     });
-  };
+  }, [deleteProduct]);
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [getProducts]);
 
-  const handleSearchChange = (event) => {
+  const handleSearchChange = useCallback((event) => {
     setSearchTerm(event.target.value);
-  };
+  }, []);
 
   const filteredProducts = products.filter((product) =>
     product.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     const auth = getAuth();
     try {
       await auth.signOut(); // Cierra la sesión del usuario
     } catch (error) {
-      console.error("Error al cerrar sesión:", error);
+      console.error('Error al cerrar sesión:', error);
     }
-  };
+  }, []);
 
   return (
     <div>
       {/* Navbar */}
-      <Navbar   style={{ backgroundColor: '#40973B' }} expand="lg">
-        <Navbar.Brand as={Link} to="/"  >
-          <h5 style={{color: 'white'}}>Derechos reservados por Edgar Angeles Gonzalez </h5> 
+      <Navbar style={{ backgroundColor: '#40973B' }} expand="lg">
+        <Navbar.Brand as={Link} to="/">
+          <h5 style={{ color: 'white' }}>Derechos reservados por Edgar Angeles Gonzalez </h5>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
