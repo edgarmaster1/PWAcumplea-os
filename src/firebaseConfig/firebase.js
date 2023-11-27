@@ -1,5 +1,4 @@
 import firebase from "firebase/compat/app";
-import { getAnalytics } from "firebase/analytics";
 //import {getMessaging} from 'firebase/messaging';
 import 'firebase/compat/firestore' 
 
